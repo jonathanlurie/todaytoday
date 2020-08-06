@@ -1,0 +1,21 @@
+.central-display {
+  padding: 10px;
+  background: #FFF;
+}
+
+.central-display .monaco-editor {
+  /* padding: 100px; */
+  min-height: 65vh;
+  /* border: dashed 1px; */
+}
+
+.central-display .editor-container {
+  border: dashed 1px #8ac7ff;
+  padding: 1px;
+
+}
+
+.central-display .date-title {
+  text-align: center;
+  margin-bottom: 20px;
+}

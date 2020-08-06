@@ -43,23 +43,23 @@ class App extends React.Component {
           <Space>
             <MenuOutlined onClick={this.showDrawer}/>
             <span>
-            Today
+            Today Today
             </span>
             
           </Space>
         </Header>
         
         <Row>
-          <Col xs={2}  sm={2}  md={3}  lg={4} xl={5} style={{background: 'green'}}>
-            left
+          <Col xs={2}  sm={2}  md={3}  lg={4} xl={5} style={{background: 'white'}}>
+            
           </Col>
-          <Col xs={20} sm={20} md={18} lg={16} xl={14} style={{background: '#aaa'}}>
+          <Col xs={20} sm={20} md={18} lg={16} xl={14}>
             <Content>
               <CentralDisplay/>
             </Content>
           </Col>
-          <Col xs={2}  sm={2}  md={3}  lg={4} xl={5} style={{background: 'green'}}>
-            right
+          <Col xs={2}  sm={2}  md={3}  lg={4} xl={5} style={{background: 'white'}}>
+            
           </Col>
         </Row>
         

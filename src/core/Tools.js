@@ -54,6 +54,22 @@ class Tools {
     
     return `${currentDatetime}${timezoneStandard}`
   }
+
+
+  static isItToday(day) {
+    let today = Tools.getIso8601z({onlyDate: true})
+    return today === day.slice(0, 10)
+  }
+
+
+  static dayDeltaFromToday(day) {
+    const today = new Date(Tools.getIso8601z({onlyDate: true}))
+    const theOtherDay = new Date(day)
+
+    let diff = (theOtherDay - today) / (1000 * 3600 * 24)
+    return diff
+  }
+
 }
 
 export default Tools
