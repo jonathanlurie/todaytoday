@@ -1,0 +1,29 @@
+.side-panel .calendar {
+  border-color: #c3c3c361;
+  border-radius: 2px;
+}
+
+.side-panel .calendar .react-calendar__tile--now {
+  background: #e6e6e6;
+}
+
+.side-panel .calendar .react-calendar__month-view__days__day--weekend {
+  color: #1890ff;
+}
+
+.side-panel .calendar .react-calendar__tile--active {
+  background: #1890ff;
+  color: #fff;
+}
+
+.side-panel .calendar button {
+  border-radius: 2px;
+}
+
+.side-panel .calendar abbr {
+  text-decoration: none;
+}
+
+.side-panel .calendar button:enabled:hover {
+  background: #d5ebff;
+}
