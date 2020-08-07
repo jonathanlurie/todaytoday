@@ -70,6 +70,12 @@ class Tools {
     return diff
   }
 
+
+  static getDayRelativeTo(day, delta) {
+    const refDay = new Date(day)
+    refDay.setDate(refDay.getDate() + delta)
+    return Tools.getIso8601z({date: refDay, onlyDate: true})
+  }
 }
 
 export default Tools

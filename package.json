@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.5.2",
     "dompurify": "^2.0.12",
+    "highlight.js": "^10.1.2",
     "immortal-db": "^1.0.3",
     "marked": "^1.1.1",
     "react": "^16.13.1",

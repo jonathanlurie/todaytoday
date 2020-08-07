@@ -36,3 +36,11 @@
     transform: rotate(360deg);
   }
 }
+
+
+.today-logo {
+  color: #1890ff;
+  font-size: 1.75em;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+}

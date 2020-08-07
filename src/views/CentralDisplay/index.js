@@ -1,11 +1,13 @@
 import React from 'react'
 import Store from '../../core/Store'
-import {Button, Row, Divider } from 'antd'
+import {Button, Row, Col, Divider, notification } from 'antd'
 import MyEntryCollection from '../../core/EntryCollection'
 import { /*monaco,*/ ControlledEditor } from '@monaco-editor/react'
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { QuestionCircleOutlined, CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons'
 import './style.css'
 import Tools from '../../core/Tools'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github.css'
 
 // monaco
 //   .init()
@@ -20,15 +22,39 @@ class CentralDisplay extends React.Component {
       editionMode: false,
       isEditorReady: false,
     }
-
+    this._htmlDivRef = React.createRef()
     this._editText = ''
   }
 
 
+
+
+  highlight = () => {
+    if (!this.state.editionMode && this._htmlDivRef.current) {
+      // console.log('this._htmlDivRef', this._htmlDivRef)
+      
+        const nodes = this._htmlDivRef.current.querySelectorAll('pre')
+        nodes.forEach((node) => {
+          console.log('node', node)
+          
+          hljs.highlightBlock(node)
+        })
+    }
+  }
+
+
   componentDidMount() {
+    // pressing Escape while in edition mode will saves and quit
+    document.addEventListener('keyup', (evt) => {
+      if(this.state.editionMode && evt.key === 'Escape') {
+       this.textSave()
+      }
+    })
+
     Store.on('set:selectedDate', (evt) => {
       this.setState({selectedDate: evt.value})
     })
+    this.highlight()
   }
 
 
@@ -36,6 +62,7 @@ class CentralDisplay extends React.Component {
     if(this.state.editionMode) {
       // this.refs.writeComponent.focus() 
     }
+    this.highlight()
   }
   
 
@@ -52,13 +79,32 @@ class CentralDisplay extends React.Component {
 
   goEdit = () => {
     this.setState({editionMode: true})
+
+    notification.info({
+      message: `Tips`,
+      description: 'Press Escape key to save!',
+      placement: 'bottomRight',
+    });
   }
+
+  previousDay = (evt) => {
+    evt.preventDefault()
+    Store.set('selectedDate', Tools.getDayRelativeTo(this.state.selectedDate, -1))
+  }
+
+
+  nextDay = (evt) => {
+    evt.preventDefault()
+    Store.set('selectedDate', Tools.getDayRelativeTo(this.state.selectedDate, +1))
+  }
+
 
   
   render() {
     let dateId = this.state.selectedDate
     let entry = MyEntryCollection.getEntry(dateId)
     this._editText = entry ? entry.text : ''
+    // let textHtml = hljs.highlightAuto(entry ? entry.html : '').value
     let textHtml = entry ? entry.html : ''
     
     let dateString = (new Date(dateId)).toDateString()
@@ -70,15 +116,15 @@ class CentralDisplay extends React.Component {
         <div
           className="date-title"
         >
-          <span style={{fontSize: '2em'}}>
+          <div style={{fontSize: '2em'}}>
             Today
-          </span>
-          <span style={{
+          </div>
+          <div style={{
             marginLeft: 5,
             color: '#aaa'
           }}>
             {dateString}
-          </span>
+          </div>
         </div>
       )
     } else {
@@ -89,18 +135,32 @@ class CentralDisplay extends React.Component {
         <div
           className="date-title"
         >
-          <span style={{fontSize: '2em'}}>
+          <div style={{fontSize: '2em'}}>
             {dateString}
-          </span>
-          <span style={{
+          </div>
+          <div style={{
             marginLeft: 5,
             color: '#aaa'
           }}>
             {dateDiffStr}
-          </span>
+          </div>
         </div>
       )
     }
+
+    let header = (
+      <Row align="middle">
+        <Col span={6} style={{textAlign: 'right'}}>
+          <CaretLeftOutlined className="arrow-day" onClick={this.previousDay}/>
+        </Col>
+        <Col span={12}>
+          {dateTitleComp}
+        </Col>
+        <Col span={6} style={{textAlign: 'left'}}>
+          <CaretRightOutlined className="arrow-day" onClick={this.nextDay}/>
+        </Col>
+      </Row>
+    )
 
 
     let displayDiv = null
@@ -112,7 +172,6 @@ class CentralDisplay extends React.Component {
 
       buttonToShow = (
         <Row justify="center">
-          <Divider />
           <Button type="primary"  onClick={this.textSave}>Save</Button>
         </Row>
       )
@@ -129,7 +188,13 @@ class CentralDisplay extends React.Component {
                 wordWrap: 'on',
                 minimap: {
                   enabled: false
-                }
+                },
+                scrollbar: {
+                  useShadows: false
+                },
+                renderLineHighlight: 'none',
+                lineNumbersMinChars: 3,
+                autoClosingQuotes: "always"
               }}
               value={this._editText}
               editorDidMount={this.handleEditorDidMount}
@@ -141,16 +206,20 @@ class CentralDisplay extends React.Component {
       console.log('READ MODE')
       buttonToShow = (
         <Row justify="center">
-          <Divider />
           <Button type="primary"  onClick={this.goEdit}>Edit</Button>
         </Row>
       )
 
       displayDiv = (
+        <div>
+          <Divider />
           <div
+            ref={this._htmlDivRef}
             dangerouslySetInnerHTML={{__html: textHtml}}
+            onDoubleClick={this.goEdit}
           />
-
+          <Divider />
+        </div>
       )
     }
 
@@ -160,7 +229,7 @@ class CentralDisplay extends React.Component {
       displayDiv = (
         <div
           style={{
-            height: '65vh',
+            height: '50vh',
             position: 'relative'
           }}
         >
@@ -208,12 +277,8 @@ class CentralDisplay extends React.Component {
       <div
         className="central-display"
       >
-
-        {dateTitleComp}
-        
+        {header}
         {displayDiv}
-       
-        
         {buttonToShow}
       </div>
     )
