@@ -1,5 +1,4 @@
 import React from 'react'
-import logo from './logo.svg'
 import './App.css'
 import { Layout, Row, Col, Drawer, Space } from 'antd'
 import { MenuOutlined, GithubOutlined } from '@ant-design/icons'
@@ -7,7 +6,17 @@ import SidePanel from './views/SidePanel'
 import CentralDisplay from './views/CentralDisplay'
 import Store from './core/Store'
 import Tools from './core/Tools'
+import EntryCollection from './core/EntryCollection'
 const { Header, Footer, Sider, Content } = Layout
+
+// press cmd + s to download a snapshot
+document.addEventListener("keydown", function(e) {
+  if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)  && e.keyCode == 83) {
+    e.preventDefault()
+    EntryCollection.downloadSnapshot()
+  }
+}, false)
+
 
 class App extends React.Component {
   constructor(props) {

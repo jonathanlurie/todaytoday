@@ -1,6 +1,6 @@
 import React from 'react'
 import Store from '../../core/Store'
-import {Button, Row, Col, Divider, notification } from 'antd'
+import {Button, Row, Col, Divider, notification, Tooltip } from 'antd'
 import MyEntryCollection from '../../core/EntryCollection'
 import { /*monaco,*/ ControlledEditor } from '@monaco-editor/react'
 import { QuestionCircleOutlined, CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons'
@@ -49,6 +49,22 @@ class CentralDisplay extends React.Component {
       if(this.state.editionMode && evt.key === 'Escape') {
        this.textSave()
       }
+
+      if(!this.state.editionMode && evt.key === 'Enter') {
+        this.goEdit()
+      }
+
+      if(evt.key === 'ArrowLeft') {
+        this.previousDay(evt)
+      }
+
+      if(evt.key === 'ArrowRight') {
+        this.nextDay(evt)
+      }
+
+      console.log(evt)
+      
+      
     })
 
     Store.on('set:selectedDate', (evt) => {
@@ -151,13 +167,17 @@ class CentralDisplay extends React.Component {
     let header = (
       <Row align="middle">
         <Col span={6} style={{textAlign: 'right'}}>
-          <CaretLeftOutlined className="arrow-day" onClick={this.previousDay}/>
+          <Tooltip placement="left" title="Keyboard left key ⚡">
+            <CaretLeftOutlined className="arrow-day" onClick={this.previousDay}/>
+          </Tooltip>
         </Col>
         <Col span={12}>
           {dateTitleComp}
         </Col>
         <Col span={6} style={{textAlign: 'left'}}>
-          <CaretRightOutlined className="arrow-day" onClick={this.nextDay}/>
+          <Tooltip placement="right" title="Keyboard right key ⚡">
+            <CaretRightOutlined className="arrow-day" onClick={this.nextDay}/>
+          </Tooltip>
         </Col>
       </Row>
     )
@@ -213,11 +233,13 @@ class CentralDisplay extends React.Component {
       displayDiv = (
         <div>
           <Divider />
-          <div
-            ref={this._htmlDivRef}
-            dangerouslySetInnerHTML={{__html: textHtml}}
-            onDoubleClick={this.goEdit}
-          />
+          <Tooltip placement="left" title="Double click to edit ⚡" destroyTooltipOnHide={true}>
+            <div
+              ref={this._htmlDivRef}
+              dangerouslySetInnerHTML={{__html: textHtml}}
+              onDoubleClick={this.goEdit}
+            />
+          </Tooltip>
           <Divider />
         </div>
       )

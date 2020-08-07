@@ -15,14 +15,9 @@ class SidePanel extends React.Component {
   }
 
 
-  exportSnapshot = () => {
-    const jsonSnapshot = EntryCollection.exportJsonSnapshot()
-    const filename = `todatoday_snapshot_${Tools.getIso8601z({timeSeparator: '-', withTimezone: false})}.json`
-    console.log('filename', filename)
-    
-    Tools.downloadJSON(filename, jsonSnapshot)
+  dlSnapshot = () => {
+    EntryCollection.downloadSnapshot()
   }
-
 
   render() {
     return (
@@ -40,7 +35,7 @@ class SidePanel extends React.Component {
         />
         
         <Divider />
-        <Button className="wide-button" type="primary" icon={<DownloadOutlined />} size="large" onClick={this.exportSnapshot}>Export snapshot</Button>
+        <Button className="wide-button" type="primary" icon={<DownloadOutlined />} size="large" onClick={this.dlSnapshot}>Export snapshot</Button>
         
       </div>
     )

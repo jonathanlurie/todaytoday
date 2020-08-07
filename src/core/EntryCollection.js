@@ -1,4 +1,5 @@
 import Entry from './Entry'
+import Tools from './Tools'
 import { ImmortalDB } from 'immortal-db'
 
 const TODAY_DATE_ID_LIST = 'today_dateIdList'
@@ -17,6 +18,12 @@ class EntryCollection {
     return JSON.stringify(simplified)
   }
 
+
+  downloadSnapshot() {
+    const jsonSnapshot = this.exportJsonSnapshot()
+    const filename = `todatoday_snapshot_${Tools.getIso8601z({timeSeparator: '-', withTimezone: false})}.json`
+    Tools.downloadJSON(filename, jsonSnapshot)
+  }
 
   /**
    * Fetch data from ImmortalDB
