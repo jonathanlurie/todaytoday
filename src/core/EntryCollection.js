@@ -9,6 +9,15 @@ class EntryCollection {
   }
 
 
+  exportJsonSnapshot() {
+    const simplified = {}
+    Object.keys(this._collection).forEach((dateId) => {
+      simplified[dateId] = this._collection[dateId].text
+    })
+    return JSON.stringify(simplified)
+  }
+
+
   /**
    * Fetch data from ImmortalDB
    */

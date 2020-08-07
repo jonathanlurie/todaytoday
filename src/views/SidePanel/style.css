@@ -27,3 +27,7 @@
 .side-panel .calendar button:enabled:hover {
   background: #d5ebff;
 }
+
+.side-panel .wide-button {
+  width: 100%;
+}

@@ -3,6 +3,8 @@ class Tools {
   static getIso8601z(options = {}) {
     const date = 'date' in options ? options.date : new Date()
     const onlyDate = 'onlyDate' in options ? options.onlyDate : false
+    const timeSeparator = 'timeSeparator' in options ? options.timeSeparator : ':'
+    const withTimezone = 'withTimezone' in options ? options.withTimezone : true
 
     // timezone part
     const timezoneOffsetMin = date.getTimezoneOffset()
@@ -46,10 +48,14 @@ class Tools {
   
     // Current datetime
     // String such as 2016-07-16T19:20:30
-    currentDatetime = `${currentYear}-${currentMonth}-${currentDate}T${currentHours}:${currentMinutes}:${currentSeconds}`
+    currentDatetime = `${currentYear}-${currentMonth}-${currentDate}T${currentHours}${timeSeparator}${currentMinutes}${timeSeparator}${currentSeconds}`
   
     if (onlyDate) {
       return `${currentYear}-${currentMonth}-${currentDate}`
+    }
+
+    if (!withTimezone) {
+      return currentDatetime
     }
     
     return `${currentDatetime}${timezoneStandard}`
@@ -76,6 +82,20 @@ class Tools {
     refDay.setDate(refDay.getDate() + delta)
     return Tools.getIso8601z({date: refDay, onlyDate: true})
   }
+
+
+  // borrowed from
+  // https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server
+  static downloadJSON(filename, text) {
+    const element = document.createElement('a')
+    element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text))
+    element.setAttribute('download', filename)
+    element.style.display = 'none'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+  }
+
 }
 
 export default Tools
