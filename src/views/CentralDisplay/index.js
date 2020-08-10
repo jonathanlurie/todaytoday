@@ -2,17 +2,13 @@ import React from 'react'
 import Store from '../../core/Store'
 import {Button, Row, Col, Divider, notification, Tooltip } from 'antd'
 import MyEntryCollection from '../../core/EntryCollection'
-import { /*monaco,*/ ControlledEditor } from '@monaco-editor/react'
 import { QuestionCircleOutlined, CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons'
-import './style.css'
+import CodeMirror from '@uiw/react-codemirror'
+import 'codemirror/addon/display/placeholder'
 import Tools from '../../core/Tools'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
-
-// monaco
-//   .init()
-//   .then(monaco => {/* here is the instance of monaco, so you can use the `monaco.languages` or whatever you want */})
-//   .catch(error => console.error('An error occurred during initialization of Monaco: ', error))
+import './style.css'
 
 class CentralDisplay extends React.Component {
   constructor(props) {
@@ -32,11 +28,8 @@ class CentralDisplay extends React.Component {
   highlight = () => {
     if (!this.state.editionMode && this._htmlDivRef.current) {
       // console.log('this._htmlDivRef', this._htmlDivRef)
-      
         const nodes = this._htmlDivRef.current.querySelectorAll('pre')
         nodes.forEach((node) => {
-          console.log('node', node)
-          
           hljs.highlightBlock(node)
         })
     }
@@ -60,11 +53,7 @@ class CentralDisplay extends React.Component {
 
       if(evt.key === 'ArrowRight') {
         this.nextDay(evt)
-      }
-
-      console.log(evt)
-      
-      
+      }      
     })
 
     Store.on('set:selectedDate', (evt) => {
@@ -82,8 +71,11 @@ class CentralDisplay extends React.Component {
   }
   
 
-  onTextUpdate = (ev, value) => {
-    this._editText = value
+  onTextUpdate = (codeMirrorInstance, changes) => {
+    // console.log('codeMirrorInstance ', codeMirrorInstance)
+    // console.log('changes ', changes)
+    
+    this._editText = codeMirrorInstance.getValue()
   }
 
   
@@ -198,27 +190,17 @@ class CentralDisplay extends React.Component {
       
       displayDiv = (
           <div className="editor-container">
-            <ControlledEditor
-              className="monaco-editor"
-              // height="fit-content"
-              language="markdown"
-              theme="light"
-              options={{  // all options here: https://microsoft.github.io/monaco-editor/api/interfaces/monaco.editor.ieditoroptions.html
-                fontSize: 16,
-                wordWrap: 'on',
-                minimap: {
-                  enabled: false
-                },
-                scrollbar: {
-                  useShadows: false
-                },
-                renderLineHighlight: 'none',
-                lineNumbersMinChars: 3,
-                autoClosingQuotes: "always"
-              }}
+            <CodeMirror
+              height="65vh"
               value={this._editText}
-              editorDidMount={this.handleEditorDidMount}
               onChange={this.onTextUpdate}
+              options={{
+                tabSize: 2,
+                mode: 'markdown',
+                lineWrapping: true,
+                autofocus: true,
+                placeholder: 'today today is Markdown-friendly!'
+              }}
             />
           </div>
       )
@@ -233,8 +215,9 @@ class CentralDisplay extends React.Component {
       displayDiv = (
         <div>
           <Divider />
-          <Tooltip placement="left" title="Double click to edit ⚡" destroyTooltipOnHide={true}>
+          <Tooltip placement="top" title="Double click to edit ⚡" destroyTooltipOnHide={true}>
             <div
+              className="text-corpus"
               ref={this._htmlDivRef}
               dangerouslySetInnerHTML={{__html: textHtml}}
               onDoubleClick={this.goEdit}

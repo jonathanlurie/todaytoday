@@ -26,6 +26,7 @@ class SidePanel extends React.Component {
       >
         <Calendar
           className="calendar"
+          value={new Date(Store.get('selectedDate'))}
           onChange={(date) => {
             console.log(date)
             

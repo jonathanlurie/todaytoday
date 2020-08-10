@@ -11,7 +11,7 @@
 
 .central-display .editor-container {
   border: dashed 1px #cbe6ff;
-  padding: 1px;
+  /* padding: 1px; */
   margin-bottom: 20px;
 }
 
@@ -32,4 +32,38 @@
 
 .central-display .arrow-day:hover {
   color: #aaa;
+}
+
+.central-display .text-corpus {
+  font-size: 15px;
+}
+
+.central-display .CodeMirror {
+  border-radius: 0;
+}
+
+.central-display .CodeMirror-gutters {
+  background-color: #f7f7f763;
+  border-right-color: #dddddda3;
+}
+
+.central-display .CodeMirror-linenumber {
+  color: #9999998a;
+}
+
+.cm-s-default .cm-header {
+  color: #0179e8;
+}
+
+.cm-s-default .cm-attribute {
+  color: #0069ca;
+}
+
+.cm-s-default .cm-link {
+  color: #0063cc;
+}
+
+.central-display .CodeMirror pre.CodeMirror-placeholder {
+  color: rgb(197, 197, 197);
+  text-align: center;
 }
