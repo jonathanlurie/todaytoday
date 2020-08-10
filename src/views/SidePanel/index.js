@@ -11,9 +11,16 @@ import './style.css'
 class SidePanel extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {}
+    this.state = {
+      selectedDate: Store.get('selectedDate'),
+    }
   }
 
+  componentDidMount() {
+    Store.on('set:selectedDate', (evt) => {
+      this.setState({selectedDate: evt.value})
+    })
+  }
 
   dlSnapshot = () => {
     EntryCollection.downloadSnapshot()
@@ -26,7 +33,7 @@ class SidePanel extends React.Component {
       >
         <Calendar
           className="calendar"
-          value={new Date(Store.get('selectedDate'))}
+          value={new Date(this.state.selectedDate)}
           onChange={(date) => {
             console.log(date)
             
