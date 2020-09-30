@@ -86,8 +86,17 @@ class EntryCollection {
   }
 
 
-  hasEntry(detaId) {
-    return detaId in this._collection
+  hasEntry(dateId) {
+    return dateId in this._collection
+  }
+
+
+  hasDate(date) {
+    const dateId = Tools.getIso8601z({
+      date,
+      onlyDate: true,
+    })
+    return this.hasEntry(dateId)
   }
 
 

@@ -8,6 +8,7 @@ Text editor is **Markdown** compatible and will highlight code samples.
 
 # Tips
 - Use keyboard left/right arrow to navigate to the previous/next day
+- Use keyboard top/bottom arrow to navigate to the previous/next week
 - Activate edition mode mode by pressing Enter key
 - Save edit and leave edition mode by pressing Escape
 - Press keys cmd + s (or ctrl + s on Windows) to download a data snapshot

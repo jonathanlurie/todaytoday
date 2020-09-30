@@ -10,6 +10,8 @@ import hljs from 'highlight.js'
 import 'highlight.js/styles/github.css'
 import './style.css'
 
+console.log('MyEntryCollection', MyEntryCollection)
+
 class CentralDisplay extends React.Component {
   constructor(props) {
     super(props)
@@ -22,7 +24,7 @@ class CentralDisplay extends React.Component {
     this._editText = ''
   }
 
-
+  
 
 
   highlight = () => {
@@ -47,13 +49,23 @@ class CentralDisplay extends React.Component {
         this.goEdit()
       }
 
-      if(evt.key === 'ArrowLeft') {
-        this.previousDay(evt)
-      }
+      if (!this.state.editionMode) {
+        if(evt.key === 'ArrowLeft') {
+          this.moveDay(-1)
+        }
 
-      if(evt.key === 'ArrowRight') {
-        this.nextDay(evt)
-      }      
+        if(evt.key === 'ArrowRight') {
+          this.moveDay(+1)
+        }
+
+        if(evt.key === 'ArrowUp') {
+          this.moveDay(-7)
+        }
+
+        if(evt.key === 'ArrowDown') {
+          this.moveDay(+7)
+        }
+      }
     })
 
     Store.on('set:selectedDate', (evt) => {
@@ -97,13 +109,17 @@ class CentralDisplay extends React.Component {
 
   previousDay = (evt) => {
     evt.preventDefault()
-    Store.set('selectedDate', Tools.getDayRelativeTo(this.state.selectedDate, -1))
+    this.moveDay(-1)
   }
 
 
   nextDay = (evt) => {
     evt.preventDefault()
-    Store.set('selectedDate', Tools.getDayRelativeTo(this.state.selectedDate, +1))
+    this.moveDay(+1)
+  }
+
+  moveDay = (n) => {
+    Store.set('selectedDate', Tools.getDayRelativeTo(this.state.selectedDate, n))
   }
 
 

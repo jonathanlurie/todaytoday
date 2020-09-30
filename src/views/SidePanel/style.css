@@ -31,3 +31,9 @@
 .side-panel .wide-button {
   width: 100%;
 }
+
+.highlighed-day {
+  background: linear-gradient(142deg, rgb(247 54 177) 0%, rgb(8 6 169) 100%);
+  color: white !important;
+  font-weight: 600;
+}
